@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "seafile",
+  "repo": "seafile-stack-module",
+  "runtimeId": "seafile",
+  "lifecycle": "active",
+  "dependencies": [
+    "stack-foundation"
+  ],
+  "overlays": [
+    "stack.compose/seafile.yml",
+    "stack.config/seafile"
+  ]
+}

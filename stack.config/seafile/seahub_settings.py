@@ -1,0 +1,37 @@
+SECRET_KEY = "{{SEAFILE_SECRET_KEY}}"
+
+TIME_ZONE = 'UTC'
+
+FILE_SERVER_ROOT = "https://seafile.{{DOMAIN}}/seafhttp"
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'mail.{{DOMAIN}}'
+EMAIL_HOST_USER = 'seafile@{{MAIL_DOMAIN}}'
+EMAIL_HOST_PASSWORD = '{{SEAFILE_EMAIL_PASSWORD}}'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+
+ENABLE_REMOTE_USER_AUTHENTICATION = True
+REMOTE_USER_HEADER = 'HTTP_REMOTE_USER'
+REMOTE_USER_CREATE_UNKNOWN_USER = True
+REMOTE_USER_PROTECTED_PATH = ['/accounts/login/']
+
+ENABLE_ONLYOFFICE = True
+VERIFY_ONLYOFFICE_CERTIFICATE = True
+ONLYOFFICE_APIJS_URL = 'https://onlyoffice.{{DOMAIN}}/web-apps/apps/api/documents/api.js'
+ONLYOFFICE_FILE_EXTENSION = ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'odt', 'fodt', 'odp', 'fodp', 'ods', 'fods', 'csv', 'ppsx', 'pps')
+ONLYOFFICE_EDIT_FILE_EXTENSION = ('docx', 'pptx', 'xlsx')
+ONLYOFFICE_JWT_HEADER = 'AuthorizationJwt'
+ONLYOFFICE_JWT_SECRET = '{{ONLYOFFICE_JWT_SECRET}}'
+
+# Redis cache configuration using Django's built-in Redis backend
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://valkey:6379/0',
+        'OPTIONS': {
+            'password': '{{VALKEY_ADMIN_PASSWORD}}',
+        }
+    }
+}
