@@ -18,7 +18,8 @@
   "overlays": [
     "stack.compose/seafile.yml",
     "stack.config/seafile",
-    "stack.containers/test-runner/playwright-tests/tests/deep/forward-auth/seafile.spec.ts"
+    "stack.containers/test-runner/playwright-tests/tests/deep/forward-auth/seafile.spec.ts",
+    "stack.kotlin/test-runner/src/main/kotlin/org/webservices/testrunner/suites/SeafileFileManagementTests.kt"
   ],
   "testAssets": []
 }
