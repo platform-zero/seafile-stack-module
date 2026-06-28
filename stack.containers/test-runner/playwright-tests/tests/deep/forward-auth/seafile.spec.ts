@@ -14,6 +14,8 @@ import {
 import { serviceUrl } from '../../../utils/stack-urls';
 import { logPageTelemetry, setupNetworkLogging } from '../../../utils/telemetry';
 
+const moduleScreenshotRoot = path.join(screenshotRoot, 'seafile');
+
 test.use({ storageState: authenticatedSessionState });
 
   test('Seafile - Access with forward auth', async ({ page }) => {
@@ -286,8 +288,9 @@ test.use({ storageState: authenticatedSessionState });
           }
 
           await dismissOnlyOfficeCoachmarks(docPage);
+          fs.mkdirSync(moduleScreenshotRoot, { recursive: true });
           await docPage.screenshot({
-            path: path.join(screenshotRoot, 'seafile-onlyoffice-document.jpeg'),
+            path: path.join(moduleScreenshotRoot, 'seafile-onlyoffice-document.jpeg'),
             type: 'jpeg',
             quality: 88,
             fullPage: true,
