@@ -1,0 +1,41 @@
+{
+  "configuration": {
+    "schema": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    }
+  },
+  "id": "seafile",
+  "overlays": [
+    "stack.compose/seafile.yml",
+    "stack.config/seafile",
+    "stack.containers/test-runner/playwright-tests/tests/deep/forward-auth/seafile.spec.ts",
+    "stack.kotlin/test-runner/src/main/kotlin/org/webservices/testrunner/suites/SeafileFileManagementTests.kt"
+  ],
+  "provides": [
+    {
+      "capability": "module:seafile",
+      "version": "1"
+    }
+  ],
+  "requires": [
+    {
+      "capability": "module:stack-foundation",
+      "version": "1"
+    }
+  ],
+  "schemaVersion": 1,
+  "services": [
+    {
+      "name": "seafile",
+      "routes": [],
+      "volumes": []
+    }
+  ],
+  "verification": {
+    "commands": [
+      "test -f stack.module.json && test -f module.json"
+    ]
+  }
+}
