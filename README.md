@@ -6,7 +6,7 @@
 - Lifecycle: `active`
 
 ## Owned overlays
-- `stack.compose/seafile.yml`
+- `stack.runtime.yaml`
 - `stack.config/seafile`
 
 ## Dependencies

@@ -339,9 +339,11 @@ sync_overlay_into_settings() {
     !skipping { print }
   ' "$settings_file" > "$temp_file"
 
-  printf '\n%s\n' "$OVERLAY_BEGIN" >> "$temp_file"
-  cat "$OVERLAY_FILE" >> "$temp_file"
-  printf '\n%s\n' "$OVERLAY_END" >> "$temp_file"
+  {
+    printf '\n%s\n' "$OVERLAY_BEGIN"
+    cat "$OVERLAY_FILE"
+    printf '\n%s\n' "$OVERLAY_END"
+  } >> "$temp_file"
 
   mv "$temp_file" "$settings_file"
 }
@@ -396,9 +398,9 @@ PY
 
 start_admin_user_reconciler() {
   (
-    local attempt
+    local _
 
-    for attempt in $(seq 1 120); do
+    for _ in $(seq 1 120); do
       if reconcile_admin_user; then
         log "Seafile admin user reconciliation complete"
         exit 0
@@ -417,9 +419,9 @@ seahub_is_running() {
 
 ensure_seahub_running() {
   (
-    local attempt
+    local _
 
-    for attempt in $(seq 1 180); do
+    for _ in $(seq 1 180); do
       if seahub_is_running; then
         log "Seahub process is running"
         exit 0
