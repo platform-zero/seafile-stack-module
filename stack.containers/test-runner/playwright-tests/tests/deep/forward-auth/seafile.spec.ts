@@ -109,7 +109,7 @@ test.use({ storageState: authenticatedSessionState });
 
           const uploadFixture = async (repoId: string, fileName: string, buffer: Buffer, mimeType: string) => {
             const uploadLinkResponse = await page.request.get(serviceUrl('seafile', `/api2/repos/${repoId}/upload-link/?p=/`));
-            expect(uploadLinkResponse.ok()).toBeTruthy();
+            expect(uploadLinkResponse.status()).toBe(200);
             const uploadLinkRaw = (await uploadLinkResponse.text()).trim().replace(/^"|"$/g, '');
             const uploadTarget = new URL(uploadLinkRaw, serviceUrl('seafile')).toString();
             const uploadResponse = await page.request.post(uploadTarget, {
@@ -123,7 +123,7 @@ test.use({ storageState: authenticatedSessionState });
                 },
               },
             });
-            expect(uploadResponse.ok()).toBeTruthy();
+            expect(uploadResponse.status()).toBe(200);
           };
 
           const preferredLibraryName = 'Playwright Demo Library';
@@ -131,7 +131,7 @@ test.use({ storageState: authenticatedSessionState });
           const notesName = 'stack-demo-notes.txt';
 
           const reposResponse = await page.request.get(serviceUrl('seafile', '/api2/repos/'));
-          expect(reposResponse.ok()).toBeTruthy();
+          expect(reposResponse.status()).toBe(200);
           const repos = await reposResponse.json();
           let repo = repos.find((entry: any) => entry.name === preferredLibraryName) ?? repos[0];
 
@@ -240,7 +240,7 @@ test.use({ storageState: authenticatedSessionState });
               },
               { timeout: 90000, intervals: [1000, 2000, 3000] }
             )
-            .toBeTruthy();
+            .toBe(true);
           await expect
             .poll(
               async () => {
@@ -274,13 +274,13 @@ test.use({ storageState: authenticatedSessionState });
               },
               { timeout: 90000, intervals: [1000, 2000, 3000] }
             )
-            .toBeTruthy();
+            .toBe(true);
           await expect
             .poll(
               async () => !(await hasOnlyOfficeDownloadFailure(docPage)),
               { timeout: 10000, intervals: [1000, 2000] }
             )
-            .toBeTruthy();
+            .toBe(true);
           await docPage.waitForTimeout(5000);
 
           if (await hasOnlyOfficeDownloadFailure(docPage)) {
