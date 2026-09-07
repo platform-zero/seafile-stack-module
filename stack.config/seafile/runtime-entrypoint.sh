@@ -231,12 +231,13 @@ verify_database_schema() {
 }
 
 reconcile_native_database_config() {
-  python3 - <<'PY'
+  python3 - "$CONF_DIR" <<'PY'
 import configparser
 import os
+import sys
 from pathlib import Path
 
-path = Path(os.environ["SEAFILE_CENTRAL_CONF_DIR"]) / "seafile.conf"
+path = Path(sys.argv[1]) / "seafile.conf"
 config = configparser.ConfigParser()
 config.read(path)
 if not config.has_section("database"):
