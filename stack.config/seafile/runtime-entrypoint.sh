@@ -580,11 +580,11 @@ ensure_initialized_state() {
 
 main() {
   resolve_install_dir
+  reconcile_native_database_config
   ensure_initialized_state
 
   require_path "$MARKER_FILE"
   verify_required_paths
-  reconcile_native_database_config
   ensure_shared_links
   ensure_seahub_running
   start_admin_user_reconciler
