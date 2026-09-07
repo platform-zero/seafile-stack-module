@@ -16,6 +16,7 @@ services:
     environment:
       TZ: "UTC"
       DB_HOST: "mariadb"
+      DB_PORT: 3306
       SEAFILE_MYSQL_DB_HOST: "mariadb"
       SEAFILE_MYSQL_DB_PORT: 3306
       SEAFILE_MYSQL_DB_USER: "seafile"
