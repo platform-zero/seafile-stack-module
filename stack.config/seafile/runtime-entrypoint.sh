@@ -579,6 +579,15 @@ ensure_initialized_state() {
   log "Seafile initialization complete"
 }
 
+ensure_native_webdav() {
+  require_path "$CONF_DIR/seafdav.conf"
+  if grep -Eq '^enabled[[:space:]]*=[[:space:]]*false[[:space:]]*$' "$CONF_DIR/seafdav.conf"; then
+    sed -i -E 's/^enabled[[:space:]]*=[[:space:]]*false[[:space:]]*$/enabled = true/' "$CONF_DIR/seafdav.conf"
+  fi
+  grep -Eq '^enabled[[:space:]]*=[[:space:]]*true[[:space:]]*$' "$CONF_DIR/seafdav.conf" \
+    || die "Seafile WebDAV is required for ONLYOFFICE Documents native checks"
+}
+
 main() {
   resolve_install_dir
   reconcile_native_database_config
@@ -586,6 +595,7 @@ main() {
 
   require_path "$MARKER_FILE"
   verify_required_paths
+  ensure_native_webdav
   ensure_shared_links
   ensure_seahub_running
   start_admin_user_reconciler
