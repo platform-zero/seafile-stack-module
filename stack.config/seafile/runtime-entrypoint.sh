@@ -230,6 +230,35 @@ verify_database_schema() {
   database_schema_is_complete || die "Seafile database schema is incomplete"
 }
 
+reconcile_native_database_config() {
+  python3 - "$CONF_DIR" <<'PY'
+import configparser
+import os
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1]) / "seafile.conf"
+config = configparser.ConfigParser()
+config.read(path)
+if not config.has_section("database"):
+    config.add_section("database")
+config["database"] = {
+    "type": "mysql",
+    "host": os.environ["SEAFILE_MYSQL_DB_HOST"],
+    "port": os.environ.get("SEAFILE_MYSQL_DB_PORT", "3306"),
+    "user": os.environ["SEAFILE_MYSQL_DB_USER"],
+    "password": os.environ["SEAFILE_MYSQL_DB_PASSWORD"],
+    "db_name": os.environ["SEAFILE_MYSQL_DB_SEAFILE_DB_NAME"],
+    "connection_charset": "utf8",
+}
+temporary = path.with_suffix(".conf.tmp")
+with temporary.open("w") as stream:
+    config.write(stream)
+temporary.chmod(0o600)
+temporary.replace(path)
+PY
+}
+
 database_schemas_are_empty() {
   local schema_count
 
@@ -550,12 +579,23 @@ ensure_initialized_state() {
   log "Seafile initialization complete"
 }
 
+ensure_native_webdav() {
+  require_path "$CONF_DIR/seafdav.conf"
+  if grep -Eq '^enabled[[:space:]]*=[[:space:]]*false[[:space:]]*$' "$CONF_DIR/seafdav.conf"; then
+    sed -i -E 's/^enabled[[:space:]]*=[[:space:]]*false[[:space:]]*$/enabled = true/' "$CONF_DIR/seafdav.conf"
+  fi
+  grep -Eq '^enabled[[:space:]]*=[[:space:]]*true[[:space:]]*$' "$CONF_DIR/seafdav.conf" \
+    || die "Seafile WebDAV is required for ONLYOFFICE Documents native checks"
+}
+
 main() {
   resolve_install_dir
+  reconcile_native_database_config
   ensure_initialized_state
 
   require_path "$MARKER_FILE"
   verify_required_paths
+  ensure_native_webdav
   ensure_shared_links
   ensure_seahub_running
   start_admin_user_reconciler
