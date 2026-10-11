@@ -590,8 +590,13 @@ ensure_native_webdav() {
 
 main() {
   resolve_install_dir
-  reconcile_native_database_config
+  # Existing state needs endpoint reconciliation before migrations. Fresh state
+  # must be bootstrapped first; creating conf files early falsely marks it partial.
+  if [ -f "$CONF_DIR/seafile.conf" ]; then
+    reconcile_native_database_config
+  fi
   ensure_initialized_state
+  reconcile_native_database_config
 
   require_path "$MARKER_FILE"
   verify_required_paths
