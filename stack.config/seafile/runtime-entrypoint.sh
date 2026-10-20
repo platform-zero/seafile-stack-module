@@ -379,8 +379,19 @@ sync_overlay_into_settings() {
 
 run_seahub_migrations() {
   ensure_shared_links
-  log "Running Seahub migrations"
-  "$SEAHUB_SCRIPT" python-env python3 "$SEAHUB_MANAGE_PY" migrate --noinput
+  log "Reconciling schema through upstream version-stamped upgrades"
+  # setup-seafile-mysql installs a current SQL baseline and its version stamp.
+  # Replaying Django's independent history on that baseline creates tables
+  # again (base.0002/org_last_active_time). Use the same supported versioned
+  # upgrader as the image's start.py, never --fake or invented migration rows.
+  (
+    cd "${1:-/scripts}"
+    python3 - <<'PY'
+from upgrade import check_upgrade
+
+check_upgrade()
+PY
+  )
 }
 
 reconcile_admin_user() {
