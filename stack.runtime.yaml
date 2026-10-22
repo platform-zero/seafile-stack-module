@@ -4,7 +4,7 @@ module: "seafile"
 target: "apps"
 services:
   seafile:
-    image: "seafileltd/seafile-mc:13.0.15"
+    image: "seafileltd/seafile-mc:13.0.15@sha256:1a31a792f80a75825416e0b9a36bc31f23e9eab51105ede65123104f59c7f682"
     containerName: "seafile"
     lifecycle: "daemon"
     updatePolicy: "registry"
